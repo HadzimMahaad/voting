@@ -53,13 +53,19 @@ if($_SERVER['REQUEST_METHOD']==='POST'){check();$id=(int)($_POST['id']??0);
     adminError('Unable to add the selected members. Please try again.');
   }
   break;
-    case 'update_cand':
+   case 'remove_cand':
+    $electionId=(int)($_POST['election_id']??0);$candidateId=(int)($_POST['candidate_id']??0);
+    $candidate=q("SELECT c.image_path FROM candidates c JOIN elections e ON e.id=c.election_id WHERE c.id=? AND e.id=? AND e.status='draft'",[$candidateId,$electionId])->fetch();
+    if(!$candidate)adminError('Candidates can only be removed while the election is in draft.');
+    q('DELETE FROM candidates WHERE id=? AND election_id=?',[$candidateId,$electionId]);
+    if($candidate['image_path'])removeMemberImage($candidate['image_path']);
+    $_SESSION['admin_notice']='Candidate removed from this election.';
+    break;
+   case 'update_cand':
      $electionId=(int)($_POST['election_id']??0);$candidateId=(int)($_POST['candidate_id']??0);
-  $candidate=q("SELECT c.image_path FROM candidates c JOIN elections e ON e.id=c.election_id WHERE c.id=? AND e.id=? AND e.status='draft'",[$candidateId,$electionId])->fetch();
+  $candidate=q("SELECT c.name,c.image_path,c.organization_id FROM candidates c JOIN elections e ON e.id=c.election_id WHERE c.id=? AND e.id=? AND e.status='draft'",[$candidateId,$electionId])->fetch();
   if(!$candidate)adminError('Members can only be edited while the election is in draft.');
-     $name=trim($_POST['name']??'');$organizationId=(int)($_POST['organization_id']??0)?:null;
-     if($name==='')adminError('Member name cannot be blank.');
-     if($organizationId&&!q('SELECT id FROM organizations WHERE id=?',[$organizationId])->fetch())adminError('Select a valid organization.');
+     $name=$candidate['name'];$organizationId=$candidate['organization_id'];
      $newImagePath=$candidate['image_path'];$upload=$_FILES['photo']??null;
      if($upload&&$upload['error']!==UPLOAD_ERR_NO_FILE){
         if($upload['error']!==UPLOAD_ERR_OK||!is_uploaded_file($upload['tmp_name']))adminError('Choose a valid member photo.');

@@ -23,10 +23,13 @@ head('Election details',true);
    </div>
    <?php if($election['status']==='draft'&&$organizations):?><form method="post" action="admin.php" enctype="multipart/form-data" class="row g-2 align-items-end mt-2"><?=T()?>
     <input type="hidden" name="do" value="update_cand"><input type="hidden" name="election_id" value="<?=$id?>"><input type="hidden" name="candidate_id" value="<?=$member['id']?>"><input type="hidden" name="return_to" value="election-view.php">
-    <div class="col-md-3"><label class="form-label small">Member name</label><input class="form-control form-control-sm" name="name" value="<?=e($member['name'])?>" maxlength="120" required></div>
-    <div class="col-md-3"><label class="form-label small">Organization</label><select class="form-select form-select-sm" name="organization_id"><option value="">No organization</option><?php foreach($organizations as $organization):?><option value="<?=$organization['id']?>" <?=$member['organization_id']==$organization['id']?'selected':''?>><?=e($organization['name'])?></option><?php endforeach?></select></div>
-    <div class="col"><label class="form-label small">Replace photo</label><input class="form-control form-control-sm" type="file" name="photo" accept="image/jpeg,image/png,image/gif,image/webp"></div>
-    <div class="col-auto"><button class="btn btn-outline-success btn-sm"><i class="bi bi-save"></i> Save</button></div>
+    <div class="col-md-3"><label class="form-label small">Member name</label><input class="form-control form-control-sm" name="name" value="<?=e($member['name'])?>" maxlength="120" readonly></div>
+    <div class="col-md-3"><label class="form-label small">Organization</label><select class="form-select form-select-sm" name="organization_id" disabled><option value="">No organization</option><?php foreach($organizations as $organization):?><option value="<?=$organization['id']?>" <?=$member['organization_id']==$organization['id']?'selected':''?>><?=e($organization['name'])?></option><?php endforeach?></select></div>
+    <div class="col"><label class="form-label small">Replace photo (uploads immediately)</label><input class="form-control form-control-sm" type="file" name="photo" accept="image/jpeg,image/png,image/gif,image/webp" onchange="this.form.requestSubmit()"></div>
+   </form><?php endif?>
+   <?php if($election['status']==='draft'):?><form method="post" action="admin.php" class="d-flex justify-content-end mt-2" onsubmit="return confirm('Remove this candidate from the draft election?');"><?=T()?>
+    <input type="hidden" name="do" value="remove_cand"><input type="hidden" name="election_id" value="<?=$id?>"><input type="hidden" name="candidate_id" value="<?=$member['id']?>"><input type="hidden" name="return_to" value="election-view.php">
+    <button class="btn btn-outline-danger btn-sm"><i class="bi bi-person-x"></i> Remove candidate</button>
    </form><?php endif?>
   </div><?php endforeach?>
  </div><?php endif?>
