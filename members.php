@@ -71,8 +71,8 @@ head('Members',true);
 .directory-title{border-bottom:1px solid #dce5e0;padding-bottom:16px}.member-add-panel{border-top:3px solid #0b6e4f}.directory-heading{border-bottom:1px solid #dce5e0;padding-bottom:12px}.organization-group{padding:16px 0;border-bottom:1px solid #dce5e0}.organization-group:last-child{border-bottom:0}.organization-group-heading{display:flex;align-items:center;gap:10px;margin-bottom:8px}.organization-logo{width:36px;height:36px;object-fit:contain}.member-record{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-top:1px solid #edf0ee}.member-photo,.member-placeholder{width:48px;height:48px;object-fit:cover;flex:0 0 48px}.member-edit summary{color:#0b6e4f;cursor:pointer;font-size:13px}.member-edit[open] summary{margin-bottom:10px}
 </style>
 <div class="directory-title d-flex flex-wrap justify-content-between align-items-end gap-3 mb-4">
- <div><div class="text-success small fw-semibold text-uppercase">Reusable roster</div><h1 class="h3 mb-0">Member directory</h1></div>
- <span class="text-muted"><?=number_format($memberCount)?> members</span>
+ <div><div class="text-success small fw-semibold text-uppercase"></div><h1 class="h3 mb-0">Member directory</h1></div>
+  <span class="text-muted"><?//=number_format($memberCount)?></span>
 </div>
 <?php if(!empty($_SESSION['member_error'])):?><div class="alert alert-danger"><?=e($_SESSION['member_error'])?></div><?php unset($_SESSION['member_error']);endif?>
 <?php if(!empty($_SESSION['member_notice'])):?><div class="alert alert-success"><?=e($_SESSION['member_notice'])?></div><?php unset($_SESSION['member_notice']);endif?>
